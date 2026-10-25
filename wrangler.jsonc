@@ -2,6 +2,9 @@
   "name": "pes6relay",
   "main": "worker.js",
   "compatibility_date": "2025-01-01",
-  "durable_objects": { "bindings": [{ "name": "SALA", "class_name": "Sala" }] },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Sala"] }]
+  "durable_objects": { "bindings": [{ "name": "SALA", "class_name": "Sala" }, { "name": "REG", "class_name": "Registro" }] },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Sala"] },
+    { "tag": "v2", "new_sqlite_classes": ["Registro"] }
+  ]
 }
