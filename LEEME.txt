@@ -1,0 +1,9 @@
+pes6relay (3861s). Relevo WebSocket de PES6 en Cloudflare (Workers + Durable Objects, plan gratis).
+[NO VERIFICADO] nunca desplegado ni probado contra el juego; solo revisada la sintaxis con node.
+Despliegue: GitHub Actions (workflow Deploy pes6relay, manual) con secretos CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID.
+  npx wrangler login
+  npx wrangler deploy
+URL: wss://pes6relay.<tu-subdominio>.workers.dev/pes6?room=<sala>
+Prueba (2 terminales): npx wscat -c "wss://pes6relay.<sub>.workers.dev/pes6?room=t1"
+  debe responder {"type":"joined","room":"t1"}; lo que envies en una llega a la otra, no a la misma.
+[NO VERIFICADO] riesgo: sin trafico el WebSocket podria cerrarse por inactividad; LocalRelay manda ping cada 30 s.
