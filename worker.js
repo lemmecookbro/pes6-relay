@@ -48,7 +48,21 @@ export class Sala extends DurableObject {
   }
 
   webSocketMessage(ws, msg) {
-    if (typeof msg === "string") return; // hello/status: se ignoran
+    if (typeof msg === "string") {   // CHAT_R3: solo se reenvian textos {"type":"chat","n":..,"t":..}
+      if (msg.length > 400 || msg.indexOf('"chat"') < 0) return;
+      let o;
+      try { o = JSON.parse(msg); } catch (e) { return; }
+      if (!o || o.type !== "chat" || typeof o.t !== "string" || !o.t) return;
+      const now = Date.now();
+      if (ws.chatT && now - ws.chatT < 400) return; // anti-spam
+      ws.chatT = now;
+      const out = JSON.stringify({ type: "chat", n: String(o.n || "?").slice(0, 20), t: o.t.slice(0, 80) });
+      for (const x of this.ctx.getWebSockets()) {
+        if (x === ws) continue;
+        try { x.send(out); } catch (e) { }
+      }
+      return;
+    }
     if (msg.byteLength > MAX_PAYLOAD) return;
     for (const o of this.ctx.getWebSockets()) {
       if (o === ws) continue;
